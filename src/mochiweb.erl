@@ -41,6 +41,14 @@ new_request({Socket, {Method, {abs_path, Uri}, Version}, Headers}) ->
                          Uri,
                          Version,
                          mochiweb_headers:make(Headers));
+
+new_request({Socket, {Method, {scheme, Host, Port}, Version}, Headers}) ->
+    mochiweb_request:new(Socket,
+			 Method,
+			 {scheme, Host, Port},
+			 Version,
+			 mochiweb_headers:make(Headers));
+
 % this case probably doesn't "exist".
 new_request({Socket, {Method, {absoluteURI, _Protocol, _Host, _Port, Uri},
                       Version}, Headers}) ->

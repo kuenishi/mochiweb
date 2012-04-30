@@ -101,10 +101,14 @@ get(peer) ->
 get(path) ->
     case erlang:get(?SAVE_PATH) of
         undefined ->
-            {Path0, _, _} = mochiweb_util:urlsplit_path(RawPath),
-            Path = mochiweb_util:unquote(Path0),
-            put(?SAVE_PATH, Path),
-            Path;
+	    case RawPath of
+		{scheme, Host, Port0} -> {scheme, Host, Port0};
+		_ ->
+		    {Path0, _, _} = mochiweb_util:urlsplit_path(RawPath),
+		    Path = mochiweb_util:unquote(Path0),
+		    put(?SAVE_PATH, Path),
+		    Path
+	    end;
         Cached ->
             Cached
     end;
